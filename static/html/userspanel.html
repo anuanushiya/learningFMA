@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="list-group" ng-repeat="user in usersCtrl.userslist">
+                <a class="list-group-item" ng-click="usersCtrl.setSelectedUser(user['email'])">{{user["_id"]}} {{user["email"]}}</a>
+            </div>
+        </div>
+        <div class="col-xs-8">
+            <div>
+                <ul class="list-unstyled">
+                    <li> Email : {{ usersCtrl.selectedUser.email }} </li>
+                    <li> First Name : {{ usersCtrl.selectedUser.first_name }} </li>
+                    <li> Last Name : {{ usersCtrl.selectedUser.last_name }} </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
