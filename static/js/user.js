@@ -7,9 +7,10 @@
         return {
             restrict : "E",
             templateUrl : "/static/html/userspanel.html",
-            controller : [ "$http", function($http)
+            controller : [ "$http", function($http, $scope)
             {
                 var controller = this;
+                this.searchField = {};
                 this.userslist = [];
                 $http.get("/userslist").success(function(data)
                     {
@@ -28,9 +29,15 @@
                         }
                     }
                 };
+
+                this.search = function(){
+                    $http.get("/users?email="+this.searchField.email).success(function(data)
+                        {
+                            controller.userslist = data["users"];
+                        });
+                };
             }],
             controllerAs : "usersCtrl",
         };
     });
-
 })();

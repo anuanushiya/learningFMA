@@ -100,6 +100,26 @@ def users_list():
         users.append(u)
     return jsonify( {'users' : users } ), 200
 
+@app.route("/users/", methods=["GET"])
+def users_search():
+    searched_email = request.args.get("email")
+    if searched_email.strip() == "" :
+        return users_list()
+    # this might be potentially dangerous
+    result = find_users( {"email" : { "$regex" : searched_email} });
+    users = []
+    for user in result :
+        u = { "email" : "", "first_name" : "", "last_name" : ""}
+        if "email" in user :
+            u["email"] = user["email"]
+        if "first_name" in user :
+            u["first_name"] = user["first_name"]
+        if "last_name" in user :
+            u["last_name"] = user["last_name"]
+        users.append(u)
+
+    return jsonify( {'users' : users} ), 200
+
 if __name__ == "__main__" :
     app.run()
 

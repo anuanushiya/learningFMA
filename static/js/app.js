@@ -8,6 +8,7 @@
             templateUrl : "/static/html/mainapp.html",
             controller : function()
             {
+                this.value = "hi"
                 this.selected = 1;
 
                 this.isSelected = function(value){
