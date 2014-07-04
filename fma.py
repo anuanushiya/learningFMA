@@ -38,8 +38,11 @@ def add_user(user):
 # query is the dictionary of property that is used to query the database. 
 # empty query will just return all units.
 def find_users(query):
+    print("Finding Users")
     db = get_db()
+    print("Got the DB")
     result = db.users.find(query)
+    print("Got Result")
     users = []
     for user in result :
         u = { "email" : "", "first_name" : "", "last_name" : ""}
