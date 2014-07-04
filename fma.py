@@ -171,6 +171,7 @@ def users_search():
 
 @app.route("/unitslist", methods=["GET"])
 def units_list():
+    print("listing units")
     units = find_units({});
     print("units")
     print(units)
