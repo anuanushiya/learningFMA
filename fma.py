@@ -133,6 +133,8 @@ if MONGO_URL == None :
     MONGO_URL = "mongodb://localhost:27017/" # for development environmnet, set it to local host
     print("Development environment, mongodb location at " + MONGO_URL)
 
+print("Mongo URL : " + MONGO_URL);
+
 app = Flask(__name__);
 app.config.from_object(__name__)
 

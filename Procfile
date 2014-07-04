@@ -1,1 +1,1 @@
-web: gunicorn fma:app
+web: gunicorn fma:app --log-level debug
