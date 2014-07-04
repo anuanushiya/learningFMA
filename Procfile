@@ -1,1 +1,1 @@
-web: gunicorn budgetflask:app
+web: gunicorn fma:app
