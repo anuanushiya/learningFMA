@@ -26,10 +26,12 @@
                     <li> Num Rooms     : {{ unitsCtrl.selectedUnit.num_rooms }} </li>
                     <li> Num Bathrooms : {{ unitsCtrl.selectedUnit.num_bathrooms }} </li>
                     <li> Size          : {{ unitsCtrl.selectedUnit.sqft }} </li>
+                    <input type="submit" class="btn btn-primary pull-right" value="New" ng-click="unitsCtrl.setMode('new')"/>
+                    <input type="submit" class="btn btn-primary pull-right" value="Edit" ng-click="unitsCtrl.setMode('edit')"/>
                 </ul>
             </div>
             <div ng-show="unitsCtrl.mode == 'edit'">
-                <form name="unitEditForm" ng-submit="unitsCtrl.save()">
+                <form name="unitEditForm" >
                     <ul class = list-unstyled">
                         <li>
                             <label for="block_number">Block :</label>
@@ -72,6 +74,54 @@
                             <input type="text" ng-model="unitsCtrl.selectedUnit.sqft" name="sqft" />
                         </li>
                     </ul>
+                    <input type="submit" class="btn btn-primary pull-right" value="Save" ng-click="unitsCtrl.save()"/>
+                </form>
+            </div>
+            <div ng-show="unitsCtrl.mode == 'new'">
+                <form name="unitEditForm" ng-submit="unitsCtrl.addNewUnit()">
+                    <ul class = list-unstyled">
+                        <li>
+                            <label for="block_number">Block :</label>
+                            <input type="text" ng-model="unitsCtrl.newUnit.address.block_number" name="block_number"/>
+                        </li>
+                        <li>
+                            <label for="street_name">Street :</label>
+                            <input type="text" ng-model="unitsCtrl.newUnit.address.street_name" name="street_name" />
+                        </li>
+                        <li>
+                            <label for="postal_code">Postal Code :</label>
+                            <input type="text" ng-model="unitsCtrl.newUnit.address.postal_code" name="postal_code" />
+                        </li>
+                        <li>
+                            <label for="city">City :</label>
+                            <input type="text" ng-model="unitsCtrl.newUnit.address.city" name="city" />
+                        </li>
+                        <li>
+                            <label for="country">Country :</label>
+                            <input type="text" ng-model="unitsCtrl.newUnit.address.country" name="country" />
+                        </li>
+                        <li>
+                            <label for="coordinates">Coordinates</label>
+                            <input type="text" ng-model="unitsCtrl.newUnit.address.coordinates" name="coordinates" />
+                        </li>
+                        <li>
+                            <label for="price">Price :</label>
+                            <input type="text" ng-model="unitsCtrl.newUnit.price" name="price" />
+                        </li>
+                        <li>
+                            <label for="num_rooms">Number of Rooms :</label>
+                            <input type="text" ng-model="unitsCtrl.newUnit.num_rooms" name="num_rooms" />
+                        </li>
+                        <li>
+                            <label for="num_bathrooms">Number of Bathrooms :</label>
+                            <input type="text" ng-model="unitsCtrl.newUnit.num_bathrooms" name="num_bathrooms" />
+                        </li>
+                        <li>
+                            <label for="sqft">Size(sqft) :</label>
+                            <input type="text" ng-model="unitsCtrl.newUnit.sqft" name="sqft" />
+                        </li>
+                    </ul>
+                    <input type="submit" class="btn btn-primary pull-right" value="Cancel" ng-click="unitsCtrl.setMode('view')"/>
                     <input type="submit" class="btn btn-primary pull-right" value="Save" />
                 </form>
             </div>

@@ -96,10 +96,6 @@ def to_unit(unit, copyId) :
     return u
 
 
-def add_unit(unit):
-    db = get_db()
-    db.units.insert(unit)
-
 def find_units(query):
     db = get_db()
     result = db.units.find(query)
@@ -121,6 +117,12 @@ def db_update_unit(unitdata):
         return True;
     else :
         return False
+
+def db_add_unit(unitdata) :
+    db = get_db()
+    u = to_unit(unitdata, False)
+    db.units.insert(u)
+
 
 ##########################################################
 
@@ -169,14 +171,13 @@ def units_list():
 
 @app.route("/newunit", methods=["POST"])
 def new_unit():
-    print(request.data)
+    db_add_unit(request.get_json("data"));
     return jsonify( {} ), 200
 
 @app.route("/updateunit", methods=["PUT"])
 def update_unit():
     db_update_unit(request.get_json("data"))
     return jsonify({}), 200
-
 
 if __name__ == "__main__" :
     app.run()
