@@ -56,11 +56,10 @@ def find_users(query):
     found = db.users.find(query)
     return found
 
-
 ##########################################################
 
 ######
-MONGO_URL = os.environ.get('MONGOHQ_URL')
+MONGO_URL = os.environ.get('MONGOHQ_URL') # for heroku
 
 if MONGO_URL == None :
     MONGO_URL = "mongodb://localhost:27017/" # for development environmnet, set it to local host
@@ -78,8 +77,6 @@ app.config.update({
     "USERNAME" : "admin",
     "PASSWORD" : "default",
     })
-
-app.config.from_envvar("FLASKR_SETTINGS", silent=True)
 
 @app.route("/", methods=["GET"])
 def home():

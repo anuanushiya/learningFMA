@@ -17,17 +17,9 @@
                         controller.userslist = data["users"];
                     });
 
-                this.setSelectedUser = function(email)
+                this.setSelectedUser = function(user)
                 {
-                    this.selectedUser = {};
-                    for(var i = 0; i < this.userslist.length; i++)
-                    {
-                        if(this.userslist[i].email == email)
-                        {
-                            this.selectedUser = this.userslist[i];
-                            break;
-                        }
-                    }
+                    this.selectedUser = user;
                 };
 
                 this.search = function(){
