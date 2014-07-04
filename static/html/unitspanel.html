@@ -1,1 +1,33 @@
-Unit Panel !!!
+<div class="container">
+    <div class="row">
+        <form name="unitSearchForm"  ng-submit="unitsCtrl.search()">
+            <fieldset class="form-group">
+                <input ng-model="usersCtrl.searchField.email" type="text" class="form-control" placeholder="Search Address" title="Email" />
+                <input type="submit" class="btn btn-primary pull-right" value="Search" />
+            </fieldset>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="list-group" ng-repeat="unit in unitsCtrl.unitslist">
+                <a class="list-group-item" ng-click="unitsCtrl.setSelectedUnit(unit)">{{ unit.address.block_number}}</a>
+            </div>
+        </div>
+        <div class="col-xs-8">
+            <div>
+                <ul class="list-unstyled">
+                    <li> Block         : {{ unitsCtrl.selectedUnit.address.block_number }} </li>
+                    <li> Street Name   : {{ unitsCtrl.selectedUnit.address.street_name }} </li>
+                    <li> Postal Code   : {{ unitsCtrl.selectedUnit.address.postal_code }} </li>
+                    <li> City          : {{ unitsCtrl.selectedUnit.address.city }} </li>
+                    <li> Country       : {{ unitsCtrl.selectedUnit.address.country }} </li>
+                    <li> Coordinates   : {{ unitsCtrl.selectedUnit.address.coordinates }} </li>
+                    <li> Price         : {{ unitsCtrl.selectedUnit.price }} </li>
+                    <li> Num Rooms     : {{ unitsCtrl.selectedUnit.num_rooms }} </li>
+                    <li> Num Bathrooms : {{ unitsCtrl.selectedUnit.num_bathrooms }} </li>
+                    <li> Size          : {{ unitsCtrl.selectedUnit.sqrt }} </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

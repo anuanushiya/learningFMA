@@ -27,6 +27,30 @@ def close_db(error):
 #   firstname
 #   lastname
 
+def add_user(user):
+    # make sure there is no exising user with the same email.
+    found = find_users({ "email" : user["email"]});
+    if found.count() == 0 :
+        db = get_db()
+        db.users.insert(user)
+
+# query is the dictionary of property that is used to query the database. 
+# empty query will just return all units.
+def find_users(query):
+    db = get_db()
+    result = db.users.find(query)
+    users = []
+    for user in result :
+        u = { "email" : "", "first_name" : "", "last_name" : ""}
+        if "email" in user :
+            u["email"] = user["email"]
+        if "first_name" in user :
+            u["first_name"] = user["first_name"]
+        if "last_name" in user :
+            u["last_name"] = user["last_name"]
+        users.append(u)
+    return users
+
 # unit :
 # id
 # address {
@@ -42,19 +66,39 @@ def close_db(error):
 # num_bathrooms
 # sqft  // square footage of apartment
 
-def add_user(user):
-    # make sure there is no exising user with the same email.
-    found = find_users({ "email" : user["email"]});
-    if found.count() == 0 :
-        db = get_db()
-        db.users.insert(user)
-
-# query is the dictionary of property that is used to query the database. 
-# empty query will just return all units.
-def find_users(query):
+def add_unit(unit):
     db = get_db()
-    found = db.users.find(query)
-    return found
+    db.units.insert(unit)
+
+def find_units(query):
+    db = get_db()
+    result = db.units.find(query)
+    units = []
+    for unit in result :
+        u = { "address" : { "block_number" : "", "street_number" : "", "postal_code" : "", "city" : "", "country" : "", "coordinates" : ""}, "price" : 0, "num_rooms" : 0, "num_bathrooms" : 0, "sqrt" : 0}
+        if "address" in unit :
+            if "block_number" in unit["address"] :
+                u["address"]["block_number"] = unit["address"]["block_number"]
+            if "street_number" in unit["address"] :
+                u["address"]["street_number"] = unit["address"]["street_number"]
+            if "postal_code" in unit["address"] :
+                u["address"]["postal_code"] = unit["address"]["postal_code"]
+            if "city" in unit["address"] :
+                u["address"]["city"] = unit["address"]["city"]
+            if "country" in unit["address"] :
+                u["address"]["country"] = unit["address"]["country"]
+            if "coordinates" in unit["address"] :
+                u["address"]["coordinates"] = unit["address"]["coordinates"]
+        if "price" in unit :
+            u["price"] = unit["price"] 
+        if "num_rooms" in unit :
+            u["num_rooms"] = unit["num_rooms"]
+        if "num_bathrooms" in unit :
+            u["num_bathrooms"] = unit["num_bathrooms"]
+        if "sqrt" in unit :
+            u["sqrt"] = unit["sqrt"]
+        units.append(u)
+    return units
 
 ##########################################################
 
@@ -84,17 +128,7 @@ def home():
 
 @app.route("/userslist", methods=["GET"])
 def users_list():
-    result = find_users({});
-    users = []
-    for user in result :
-        u = { "email" : "", "first_name" : "", "last_name" : ""}
-        if "email" in user :
-            u["email"] = user["email"]
-        if "first_name" in user :
-            u["first_name"] = user["first_name"]
-        if "last_name" in user :
-            u["last_name"] = user["last_name"]
-        users.append(u)
+    users = find_users({});
     return jsonify( {'users' : users } ), 200
 
 @app.route("/users/", methods=["GET"])
@@ -103,19 +137,14 @@ def users_search():
     if searched_email.strip() == "" :
         return users_list()
     # this might be potentially dangerous
-    result = find_users( {"email" : { "$regex" : searched_email} });
-    users = []
-    for user in result :
-        u = { "email" : "", "first_name" : "", "last_name" : ""}
-        if "email" in user :
-            u["email"] = user["email"]
-        if "first_name" in user :
-            u["first_name"] = user["first_name"]
-        if "last_name" in user :
-            u["last_name"] = user["last_name"]
-        users.append(u)
-
+    users = find_users( {"email" : { "$regex" : searched_email} });
     return jsonify( {'users' : users} ), 200
+
+@app.route("/unitslist", methods=["GET"])
+def units_list():
+    units = find_units({});
+    return jsonify( {"units" : units }), 200
+
 
 if __name__ == "__main__" :
     app.run()

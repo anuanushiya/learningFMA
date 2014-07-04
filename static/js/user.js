@@ -7,7 +7,7 @@
         return {
             restrict : "E",
             templateUrl : "/static/html/userspanel.html",
-            controller : [ "$http", function($http, $scope)
+            controller : [ "$http", function($http)
             {
                 var controller = this;
                 this.searchField = {};
