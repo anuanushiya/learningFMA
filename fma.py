@@ -1,4 +1,5 @@
 import os 
+import sys
 import pymongo
 from bson.objectid import ObjectId
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, make_response, jsonify
@@ -153,11 +154,16 @@ app.config.update({
     })
 
 import logging
-from logging import StreamHandler
-file_handler = StreamHandler()
-app.logger.setLevel(logging.DEBUG)  # set the desired logging level here
-app.logger.addHandler(file_handler)
 
+app.logger.setLevel(logging.DEBUG)  # set the desired logging level here
+
+handler = logging.StreamHandler(stream=sys.stdout)
+handler.setLevel(logging.DEBUG)
+handler.formatter = logging.Formatter(
+            fmt=u"%(asctime)s level=%(levelname)s %(message)s",
+                datefmt="%Y-%m-%dT%H:%M:%SZ",
+                )
+app.logger.addHandler(handler)
 
 @app.route("/", methods=["GET"])
 def home():
@@ -194,5 +200,5 @@ def update_unit():
     return jsonify({}), 200
 
 if __name__ == "__main__" :
-    app.run(debug=True)
+    app.run()
 
