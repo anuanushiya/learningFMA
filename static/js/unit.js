@@ -10,7 +10,10 @@
             controller : [ "$http", function($http)
             {
                 var controller = this;
+                this.mode = "edit";
                 this.searchField = {};
+                this.postField = {};
+                this.selectedUnit = {};
                 this.unitslist = [];
                 $http.get("/unitslist").success(function(data)
                     {
@@ -23,6 +26,16 @@
                 };
                 
                 this.search = function(){
+                };
+
+                this.save = function(){
+                    if(this.mode == "edit")
+                    {
+                        $http.put("/updateunit", this.selectedUnit).success(function(data)
+                            {
+                                alert("Unit updated");
+                            });
+                    }
                 };
             }],
             controllerAs: "unitsCtrl",

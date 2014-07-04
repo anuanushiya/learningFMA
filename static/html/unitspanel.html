@@ -2,7 +2,7 @@
     <div class="row">
         <form name="unitSearchForm"  ng-submit="unitsCtrl.search()">
             <fieldset class="form-group">
-                <input ng-model="usersCtrl.searchField.email" type="text" class="form-control" placeholder="Search Address" title="Email" />
+                <input ng-model="unitsCtrl.searchField.email" type="text" class="form-control" placeholder="Search Address" title="Email" />
                 <input type="submit" class="btn btn-primary pull-right" value="Search" />
             </fieldset>
         </form>
@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="col-xs-8">
-            <div>
+            <div ng-show="unitsCtrl.mode == 'view'">
                 <ul class="list-unstyled">
                     <li> Block         : {{ unitsCtrl.selectedUnit.address.block_number }} </li>
                     <li> Street Name   : {{ unitsCtrl.selectedUnit.address.street_name }} </li>
@@ -25,8 +25,55 @@
                     <li> Price         : {{ unitsCtrl.selectedUnit.price }} </li>
                     <li> Num Rooms     : {{ unitsCtrl.selectedUnit.num_rooms }} </li>
                     <li> Num Bathrooms : {{ unitsCtrl.selectedUnit.num_bathrooms }} </li>
-                    <li> Size          : {{ unitsCtrl.selectedUnit.sqrt }} </li>
+                    <li> Size          : {{ unitsCtrl.selectedUnit.sqft }} </li>
                 </ul>
+            </div>
+            <div ng-show="unitsCtrl.mode == 'edit'">
+                <form name="unitEditForm" ng-submit="unitsCtrl.save()">
+                    <ul class = list-unstyled">
+                        <li>
+                            <label for="block_number">Block :</label>
+                            <input type="text" ng-model="unitsCtrl.selectedUnit.address.block_number" name="block_number"/>
+                        </li>
+                        <li>
+                            <label for="street_name">Street :</label>
+                            <input type="text" ng-model="unitsCtrl.selectedUnit.address.street_name" name="street_name" />
+                        </li>
+                        <li>
+                            <label for="postal_code">Postal Code :</label>
+                            <input type="text" ng-model="unitsCtrl.selectedUnit.address.postal_code" name="postal_code" />
+                        </li>
+                        <li>
+                            <label for="city">City :</label>
+                            <input type="text" ng-model="unitsCtrl.selectedUnit.address.city" name="city" />
+                        </li>
+                        <li>
+                            <label for="country">Country :</label>
+                            <input type="text" ng-model="unitsCtrl.selectedUnit.address.country" name="country" />
+                        </li>
+                        <li>
+                            <label for="coordinates">Coordinates</label>
+                            <input type="text" ng-model="unitsCtrl.selectedUnit.address.coordinates" name="coordinates" />
+                        </li>
+                        <li>
+                            <label for="price">Price :</label>
+                            <input type="text" ng-model="unitsCtrl.selectedUnit.price" name="price" />
+                        </li>
+                        <li>
+                            <label for="num_rooms">Number of Rooms :</label>
+                            <input type="text" ng-model="unitsCtrl.selectedUnit.num_rooms" name="num_rooms" />
+                        </li>
+                        <li>
+                            <label for="num_bathrooms">Number of Bathrooms :</label>
+                            <input type="text" ng-model="unitsCtrl.selectedUnit.num_bathrooms" name="num_bathrooms" />
+                        </li>
+                        <li>
+                            <label for="sqft">Size(sqft) :</label>
+                            <input type="text" ng-model="unitsCtrl.selectedUnit.sqft" name="sqft" />
+                        </li>
+                    </ul>
+                    <input type="submit" class="btn btn-primary pull-right" value="Save" />
+                </form>
             </div>
         </div>
     </div>
