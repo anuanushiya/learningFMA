@@ -53,6 +53,7 @@ def find_users(query):
         if "last_name" in user :
             u["last_name"] = user["last_name"]
         users.append(u)
+    print("End of user query")
     return users
 
 # unit :
