@@ -152,6 +152,13 @@ app.config.update({
     "PASSWORD" : "default",
     })
 
+import logging
+from logging import StreamHandler
+file_handler = StreamHandler()
+app.logger.setLevel(logging.DEBUG)  # set the desired logging level here
+app.logger.addHandler(file_handler)
+
+
 @app.route("/", methods=["GET"])
 def home():
     return make_response(open('templates/index.html').read())
