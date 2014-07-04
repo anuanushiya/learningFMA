@@ -172,6 +172,8 @@ def users_search():
 @app.route("/unitslist", methods=["GET"])
 def units_list():
     units = find_units({});
+    print("units")
+    print(units)
     return jsonify( {"units" : units }), 200
 
 @app.route("/newunit", methods=["POST"])
