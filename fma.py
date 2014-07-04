@@ -158,6 +158,7 @@ def home():
 @app.route("/userslist", methods=["GET"])
 def users_list():
     users = find_users({});
+    print(users)
     return jsonify( {'users' : users } ), 200
 
 @app.route("/users/", methods=["GET"])
@@ -171,10 +172,7 @@ def users_search():
 
 @app.route("/unitslist", methods=["GET"])
 def units_list():
-    print("listing units")
     units = find_units({});
-    print("units")
-    print(units)
     return jsonify( {"units" : units }), 200
 
 @app.route("/newunit", methods=["POST"])
