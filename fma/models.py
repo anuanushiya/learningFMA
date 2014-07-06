@@ -1,9 +1,8 @@
-import os 
-import sys
 import pymongo
-from bson.objectid import ObjectId
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, make_response, jsonify
+from fma import app
+from flask import g, jsonify 
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 ######################### DB CODE ########################
 def connect_db(url) :
@@ -29,16 +28,16 @@ def close_db(error):
 #   firstname
 #   lastname
 
-def add_user(user):
+def db_add_user(user):
     # make sure there is no exising user with the same email.
-    found = find_users({ "email" : user["email"]});
+    found = db_find_users({ "email" : user["email"]});
     if found.count() == 0 :
         db = get_db()
         db.users.insert(user)
 
 # query is the dictionary of property that is used to query the database. 
 # empty query will just return all units.
-def find_users(query):
+def db_find_users(query):
     print("Finding Users")
     db = get_db()
     print("Got the DB")
@@ -71,6 +70,13 @@ def find_users(query):
 # num_rooms
 # num_bathrooms
 # sqft  // square footage of apartment
+"""
+    The purpose of this method is to trim away the irrelevant values before returning to the client or putting
+    into the database. 
+
+    unit : the dict object
+    copyId : bool , if True, then the "_id" value will be copied as well, else it will not be copied
+"""
 def to_unit(unit, copyId) :
     u = { "address" : { "block_number" : "", "street_name" : "", "postal_code" : "", "city" : "", "country" : "", "coordinates" : ""}, "price" : 0, "num_rooms" : 0, "num_bathrooms" : 0, "sqft" : 0}
     if copyId :
@@ -100,8 +106,7 @@ def to_unit(unit, copyId) :
         u["_id"] = str(unit["_id"])
     return u
 
-
-def find_units(query):
+def db_find_units(query):
     db = get_db()
     result = db.units.find(query)
     units = []
@@ -127,78 +132,3 @@ def db_add_unit(unitdata) :
     db = get_db()
     u = to_unit(unitdata, False)
     db.units.insert(u)
-
-
-##########################################################
-
-######
-MONGO_URL = os.environ.get('MONGOHQ_URL') # for heroku
-
-if MONGO_URL == None :
-    MONGO_URL = "mongodb://localhost:27017/" # for development environmnet, set it to local host
-    print("Development environment, mongodb location at " + MONGO_URL)
-
-print("Mongo URL : " + MONGO_URL);
-
-app = Flask(__name__);
-app.config.from_object(__name__)
-
-# change this from the dict() initializer to {} instead. Looks nicer.
-# I don't like key value of a dict to be "non-string", looks like variable to me.
-app.config.update({
-    "DATABASE" : MONGO_URL,
-    "DEBUG" : True,
-    "SECRET_KEY" : "Development Key",
-    "USERNAME" : "admin",
-    "PASSWORD" : "default",
-    })
-
-import logging
-
-app.logger.setLevel(logging.DEBUG)  # set the desired logging level here
-
-handler = logging.StreamHandler(stream=sys.stdout)
-handler.setLevel(logging.DEBUG)
-handler.formatter = logging.Formatter(
-            fmt=u"%(asctime)s level=%(levelname)s %(message)s",
-                datefmt="%Y-%m-%dT%H:%M:%SZ",
-                )
-app.logger.addHandler(handler)
-
-@app.route("/", methods=["GET"])
-def home():
-    return make_response(open('templates/index.html').read())
-
-@app.route("/userslist", methods=["GET"])
-def users_list():
-    users = find_users({});
-    print(users)
-    return jsonify( {'users' : users } ), 200
-
-@app.route("/users/", methods=["GET"])
-def users_search():
-    searched_email = request.args.get("email")
-    if searched_email.strip() == "" :
-        return users_list()
-    # this might be potentially dangerous
-    users = find_users( {"email" : { "$regex" : searched_email} });
-    return jsonify( {'users' : users} ), 200
-
-@app.route("/unitslist", methods=["GET"])
-def units_list():
-    units = find_units({});
-    return jsonify( {"units" : units }), 200
-
-@app.route("/newunit", methods=["POST"])
-def new_unit():
-    db_add_unit(request.get_json("data"));
-    return jsonify( {} ), 200
-
-@app.route("/updateunit", methods=["PUT"])
-def update_unit():
-    db_update_unit(request.get_json("data"))
-    return jsonify({}), 200
-
-if __name__ == "__main__" :
-    app.run()
-
