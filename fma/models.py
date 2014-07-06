@@ -11,8 +11,8 @@ def connect_db(url) :
 
 def get_db():
     if not hasattr(g, "mongo"):
-        g.mongo = connect_db(app.config["DATABASE"])
-        g.database = g.mongo.main
+        g.mongo = connect_db(app.config["DATABASE_URL"])
+        g.database = g.mongo[app.config["DATABASE_NAME"]]
     return g.database
 
 # @app.teardown_appcontext
