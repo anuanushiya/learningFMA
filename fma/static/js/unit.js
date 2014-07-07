@@ -45,7 +45,6 @@
                             query.push(key+"="+this.searchField[key]);
                         }
                     }
-                    alert(query.join("&"));
                     $http.get("/unitslist?"+query.join("&")).success(function(data)
                             {
                                 controller.unitslist = data["units"];
