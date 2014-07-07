@@ -16,19 +16,19 @@
                 </li>
                 <li>
                     <label for="price">Price :</label>
-                    <input type="text" ng-model="unitsCtrl.searchField.price" name="searchField_price" placeholder="Try 1000-3000 or 2000> (less than 2000)"/>
+                    <input type="text" ng-model="unitsCtrl.searchField.price" name="searchField_price" placeholder="Try 1000-3000 or 2000> (less than 2000)" size=40/>
                 </li>
                 <li>
                     <label for="num_rooms">Number of Rooms :</label>
-                    <input type="text" ng-model="unitsCtrl.searchField.num_rooms" name="searchField_num_rooms" placeholder="Try 1-2 or 3> (less than 3)"/>
+                    <input type="text" ng-model="unitsCtrl.searchField.num_rooms" name="searchField_num_rooms" placeholder="Try 1-2 or 3> (less than 3)" size=40/>
                 </li>
                 <li>
                     <label for="num_bathrooms">Number of Bathrooms :</label>
-                    <input type="text" ng-model="unitsCtrl.searchField.num_bathrooms" name="searchField_num_bathrooms" placeholder="Try 1-2 or 1< (more than 1)"/>
+                    <input type="text" ng-model="unitsCtrl.searchField.num_bathrooms" name="searchField_num_bathrooms" placeholder="Try 1-2 or 1< (more than 1)" size=40/>
                 </li>
                 <li>
                     <label for="sqft">Size(sqft) :</label>
-                    <input type="text" ng-model="unitsCtrl.searchField.sqft" name="searchField_sqft" placeholder="Try 600-800 or 500+"/>
+                    <input type="text" ng-model="unitsCtrl.searchField.sqft" name="searchField_sqft" placeholder="Try 600-800 or 500<" size=40/>
                 </li>
             </ul>
             <input type="submit" class="btn btn-primary pull-right" value="Search" ng-click="unitsCtrl.search()"/>
