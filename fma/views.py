@@ -30,7 +30,6 @@ def units_list():
     price = request.args.get("price")
     num_rooms = request.args.get("num_rooms")
     num_bathrooms = request.args.get("num_bathrooms")
-    sqrt = request.args.get("sqrt")
     if price is not None:
         query["price"] = get_range_query(str(price))
     if city is not None:
@@ -43,8 +42,6 @@ def units_list():
         query["num_rooms"] = get_range_query(str(num_rooms))
     if num_bathrooms is not None:
         query["num_bathrooms"] = get_range_query(str(num_bathrooms))
-    if sqrt is not None:
-        query["sqrt"] = get_range_query(sqrt)
     print(query)
     units = db_find_units(query);
     return jsonify( {"units" : units }), 200
