@@ -37,6 +37,21 @@
                 };
                 
                 this.search = function(){
+                    var query = [];
+                    for(var key in this.searchField)
+                    {
+                        if(this.searchField[key].trim() != "")
+                        {
+                            query.push(key+"="+this.searchField[key]);
+                        }
+                    }
+                    alert(query.join("&"));
+                    $http.get("/unitslist?"+query.join("&")).success(function(data)
+                            {
+                                controller.unitslist = data["units"];
+                                controller.selectedUnit = {};
+                                controller.mode = "view";
+                            });
                 };
 
                 this.save = function(){

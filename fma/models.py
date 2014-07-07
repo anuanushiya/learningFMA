@@ -38,11 +38,10 @@ def db_add_user(user):
 # query is the dictionary of property that is used to query the database. 
 # empty query will just return all units.
 def db_find_users(query):
-    print("Finding Users")
+    print("Finding users")
+    print(query)
     db = get_db()
-    print("Got the DB")
     result = db.users.find(query)
-    print("Got Result")
     users = []
     for user in result :
         u = { "email" : "", "first_name" : "", "last_name" : ""}
@@ -53,7 +52,6 @@ def db_find_users(query):
         if "last_name" in user :
             u["last_name"] = user["last_name"]
         users.append(u)
-    print("End of user query")
     return users
 
 # unit :
@@ -77,7 +75,7 @@ def db_find_users(query):
     unit : the dict object
     copyId : bool , if True, then the "_id" value will be copied as well, else it will not be copied
 """
-def to_unit(unit, copyId) :
+def to_unit(unit, copyId=None) :
     u = { "address" : { "block_number" : "", "street_name" : "", "postal_code" : "", "city" : "", "country" : "", "coordinates" : ""}, "price" : 0, "num_rooms" : 0, "num_bathrooms" : 0, "sqft" : 0}
     if copyId :
         u["_id"] = ""
@@ -95,11 +93,20 @@ def to_unit(unit, copyId) :
         if "coordinates" in unit["address"] :
             u["address"]["coordinates"] = unit["address"]["coordinates"]
     if "price" in unit :
-        u["price"] = unit["price"] 
+        try:
+            u["price"] = int(unit["price"])
+        except ValueError:
+            u["price"] = 0
     if "num_rooms" in unit :
-        u["num_rooms"] = unit["num_rooms"]
+        try:
+            u["num_rooms"] = int(unit["num_rooms"])
+        except ValueError:
+            u["num_rooms"] = 0
     if "num_bathrooms" in unit :
-        u["num_bathrooms"] = unit["num_bathrooms"]
+        try:
+            u["num_bathrooms"] = int(unit["num_bathrooms"])
+        except ValueError:
+            u["num_bathrooms"] = 0
     if "sqft" in unit :
         u["sqft"] = unit["sqft"]
     if copyId and "_id" in unit :
@@ -108,6 +115,8 @@ def to_unit(unit, copyId) :
 
 def db_find_units(query):
     db = get_db()
+    print("Finding units")
+    print(query)
     result = db.units.find(query)
     units = []
     for unit in result :
@@ -132,3 +141,47 @@ def db_add_unit(unitdata) :
     db = get_db()
     u = to_unit(unitdata, False)
     db.units.insert(u)
+
+"""
+Construct a query based on a specific syntax.
+1. A single number : returns the number
+2. <number><  : return { "$gt" : number }
+3. <number>>  : return { "$lt" : number }
+4. <min>-<max> : return { "$gte" : min , "$lte" : max}
+5. other format : return None
+"""
+def get_range_query(query):
+    print(query)
+    if query[-1] is "<" :
+        try:
+            value = float(query[:-1])
+            return { "$gt" : value }
+        except ValueError:
+            print("GTE")
+            return None
+    elif query[-1] is ">" :
+        try :
+            value = float(query[:-1])
+            return { "$lt" : value}
+        except ValueError:
+            print("LTE")
+            return None
+    elif "-" in query:
+        range = query.split("-")
+        if len(range) is not 2:
+            return None
+        else :
+            try:
+                min = float(range[0])
+                max = float(range[1])
+                return { "$lte" : max , "$gte" : min}
+            except ValueError:
+                return None
+    else:
+        try:
+            value = float(query)
+            return value
+        except ValueError:
+            print("ELSE")
+            return None
+
